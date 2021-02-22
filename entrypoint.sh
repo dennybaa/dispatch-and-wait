@@ -27,7 +27,7 @@ function trigger_workflow {
 }
 
 function ensure_workflow {
-  max_wait=10
+  max_wait=${INPUT_CREATION_TIMEOUT:-30}
   stime=$(date +%s)
   while [ $(( `date +%s` - $stime )) -lt $max_wait ]
   do
@@ -40,7 +40,7 @@ function ensure_workflow {
   done
 
   if [ -z "$workflow_runid" ]; then
-    >&2 echo "No workflow run id found. Repository dispatch failed!"
+    >&2 echo "No workflow run id found (or timedout). Repository dispatch failed!"
     exit 1
   fi
 
